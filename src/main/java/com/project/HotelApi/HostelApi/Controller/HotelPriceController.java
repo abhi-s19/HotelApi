@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,17 +17,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.HotelApi.HostelApi.Entity.BedTableEntity;
 import com.project.HotelApi.HostelApi.Entity.PriceTableEntity;
+import com.project.HotelApi.HostelApi.Exception.BedNotFoundException;
 import com.project.HotelApi.HostelApi.Exception.PriceAlreadyExistException;
 import com.project.HotelApi.HostelApi.Exception.PriceNotFoundException;
+import com.project.HotelApi.HostelApi.Service.BedTableService;
 import com.project.HotelApi.HostelApi.Service.HotelPriceService;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/v1/prices")
 public class HotelPriceController {
 	
 	@Autowired
 	HotelPriceService hotelPriceService;
+	
+	@Autowired
+	BedTableService bedTableService;
 	
 	@GetMapping
 	public ResponseEntity<List<PriceTableEntity>> getAllPrices(){
@@ -73,5 +81,18 @@ public class HotelPriceController {
 		return new ResponseEntity<String>("Price Entity deleted with id:- "+id,HttpStatus.ACCEPTED);
 	}
 	
+	
+	
+	@GetMapping("/beds/{price}")
+	public ResponseEntity<List<BedTableEntity>> getBedRoomsByPrice(@PathVariable int price) throws Exception{
+		List<BedTableEntity> dbBedTableEntities =  bedTableService.getBedsByPrice(price);
+		
+		if(dbBedTableEntities.size()>0) {
+			return new ResponseEntity<List<BedTableEntity>>(dbBedTableEntities,HttpStatus.OK);
+		}
+		else {
+			throw new BedNotFoundException("no bed rooms found with given price: "+price);
+		}
+	}
 	
 }

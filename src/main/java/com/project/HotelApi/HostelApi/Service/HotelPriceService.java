@@ -12,4 +12,5 @@ public interface HotelPriceService {
 	PriceTableEntity editPrice(PriceTableEntity dbPrice,PriceTableEntity updatedprice);
 	void deletPriceById(int id);
 	Boolean existsByPrice(int price);
+	
 }

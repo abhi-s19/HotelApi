@@ -31,4 +31,11 @@ public class PriceExceptions {
 		ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST,ex.getMessage());
 		return new ResponseEntity<ErrorResponse>(errorResponse,HttpStatus.BAD_REQUEST);
 	}
+	
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler(BedNotFoundException.class)
+	public ResponseEntity<ErrorResponse> handleBedNotFoundException(BedNotFoundException ex){
+		ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND,ex.getMessage());
+		return new ResponseEntity<ErrorResponse>(errorResponse,HttpStatus.NOT_FOUND);
+	}
 }

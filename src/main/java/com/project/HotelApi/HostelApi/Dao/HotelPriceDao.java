@@ -5,4 +5,6 @@ import com.project.HotelApi.HostelApi.Entity.PriceTableEntity;
 
 public interface HotelPriceDao extends JpaRepository<PriceTableEntity, Integer> {
 	Boolean existsByPrice(int price);
+
+	PriceTableEntity findByPrice(int price);
 }
